@@ -225,16 +225,17 @@ void procedureDeclaration(){
         //should be followed by semicolon
         getNextToken();
         if(nextToken != 17){
-            error(6);
+            error(22); //TO-Do: ask if both semicolon checks need to be different errors
         }
 
         getNextToken();
+
         insertSymbol(3, identifier, 0, 0, 0); //TO-DO fix insert for procedure
         //TO-DO inscrease level before calling block indicating a new lexigraphical level
 
         block(); 
         if(nextToken != 17){
-            error(6);
+            error(22); //TO-Do: ask if both semicolon checks need to be different errors
         }
 
         getNextToken();
@@ -549,6 +550,7 @@ void insertSymbol(int kind, char * identifier, int val, int level, int addr){
         }else if(kind == 3){
             s1.kind = kind;
             strcpy(s1.name, identifier);
+            s1.val = 0;
             s1.level = level;
             s1.addr = addr;
             s1.mark = 0;
@@ -667,7 +669,8 @@ void error (int errorNumber) {
         "Error: symbol name has already been declared", "Error: constants must be assigned with =", "Error: constants must be assigned an integer value", 
         "Error: constant and variable declarations must be followed by a semicolon", "Error: undeclared identifier", "Error: only variable values may be altered", "Error: assignment statements must use :=",
         "Error: begin must be followed by end", "Error: if must be followed by then", "Error: while must be followed by do", "Error: condition must contain comparison operator", "Error: right parenthesis must follow left parenthesis", 
-        "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols", "Error: code index exceeded code length", "Error: can't access symbol because mark set to one", "Error: program doesn't handle procedures", "Error: else must be followed by fi", "Error: if statement must include else clause", "Error: call statement may only target procedures", "Error: procedure declaration must be followed by a semicolon"};
+        "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols", "Error: code index exceeded code length", "Error: can't access symbol because mark set to one", "Error: program doesn't handle procedures", 
+        "Error: else must be followed by fi", "Error: if statement must include else clause", "Error: call statement may only target procedures", "Error: procedure declaration must be followed by a semicolon"};
     deleteAll();
     printf("%s\n", errors[errorNumber]);
     fprintf(outputFile, "%s\n", errors[errorNumber]);
