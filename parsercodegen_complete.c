@@ -79,6 +79,7 @@ void program();
 void block();
 void constDeclaration();
 int varDeclaration();
+void procedureDeclaration();
 void statement();
 void condition(); 
 void expression();
@@ -118,6 +119,7 @@ void program() {
 void block () {
     constDeclaration();
     int numsVars = varDeclaration();
+    procedureDeclaration();
     // allocates memory on stack for dynamic and static link, return address, and variables
     emit(6, 0, 3 + numsVars);
     statement();
@@ -200,6 +202,43 @@ int varDeclaration () {
     }
     // returns amount of variables to allocate memory for
     return numVars;
+}
+
+void procedureDeclaration(){
+
+    char * identifier = malloc(sizeof(char)*12);
+    while(nextToken == 30){
+
+        getNextToken();
+        // should declare identifier
+        if(nextToken != 2){
+            error(2);
+        }
+
+        fscanf(fp, "%s", identifier);
+
+        //cheecking if identifer already in table, error if so
+        if(findSymbol(identifier) != -1){
+            error(3);
+        }
+
+        //should be followed by semicolon
+        getNextToken();
+        if(nextToken != 17){
+            error(6);
+        }
+
+        getNextToken();
+        insertSymbol(3, identifier, 0, 0, 0); //TO-DO fix insert for procedure
+        //TO-DO inscrease level before calling block indicating a new lexigraphical level
+
+        block(); 
+        if(nextToken != 17){
+            error(6);
+        }
+
+        getNextToken();
+    }
 }
 
 void statement () {
