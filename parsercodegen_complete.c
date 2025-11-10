@@ -72,6 +72,7 @@ FILE *fp, *outputFile, *readFile;
 int nextToken; 
 int tp;
 int symbCount;
+int currentLevel = 0;
 int cx = 0; // code index, increments by one each time an instruction is stored
 
 // Function Prototypes
@@ -119,7 +120,7 @@ void block () {
     constDeclaration();
     int numsVars = varDeclaration();
     // allocates memory on stack for dynamic and static link, return address, and variables
-    emit(6, 0, 3 + numsVars);
+    emit(6, currentLevel, 3 + numsVars);
     statement();
 }
 
@@ -230,7 +231,7 @@ void statement () {
         // addresses expression being assigned to identifier
         expression();
         // store in variable location
-        emit(4, 0, symbol_table[symIndex].addr);
+        emit(4, currentLevel, symbol_table[symIndex].addr);
         return;
     }
     // checks if it's a begin symbol statement
@@ -325,7 +326,7 @@ void statement () {
         // read from stdin
         emit(9, 0, 2);
         // store in variable
-        emit(4, 0, symbol_table[symIndex].addr);
+        emit(4, currentLevel, symbol_table[symIndex].addr);
         return;
     }
     // check if write sym
@@ -445,7 +446,7 @@ void factor(){
             emit(1, 0, symbol_table[symIdx].val); //LIT 
         }
         else{
-            emit(3, 0, symbol_table[symIdx].addr); //LOD 
+            emit(3, currentLevel, symbol_table[symIdx].addr); //LOD 
         }
         getNextToken();
     }
