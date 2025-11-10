@@ -80,6 +80,7 @@ void program();
 void block();
 void constDeclaration();
 int varDeclaration();
+void procedureDeclaration();
 void statement();
 void condition(); 
 void expression();
@@ -119,6 +120,7 @@ void program() {
 void block () {
     constDeclaration();
     int numsVars = varDeclaration();
+    procedureDeclaration();
     // allocates memory on stack for dynamic and static link, return address, and variables
     emit(6, currentLevel, 3 + numsVars);
     statement();
@@ -201,6 +203,44 @@ int varDeclaration () {
     }
     // returns amount of variables to allocate memory for
     return numVars;
+}
+
+void procedureDeclaration(){
+
+    char * identifier = malloc(sizeof(char)*12);
+    while(nextToken == 30){
+
+        getNextToken();
+        // should declare identifier
+        if(nextToken != 2){
+            error(2);
+        }
+
+        fscanf(fp, "%s", identifier);
+
+        //cheecking if identifer already in table, error if so
+        if(findSymbol(identifier) != -1){
+            error(3);
+        }
+
+        //should be followed by semicolon
+        getNextToken();
+        if(nextToken != 17){
+            error(22); //TO-Do: ask if both semicolon checks need to be different errors
+        }
+
+        getNextToken();
+
+        insertSymbol(3, identifier, 0, 0, 0); //TO-DO fix insert for procedure
+        //TO-DO inscrease level before calling block indicating a new lexigraphical level
+
+        block(); 
+        if(nextToken != 17){
+            error(22); //TO-Do: ask if both semicolon checks need to be different errors
+        }
+
+        getNextToken();
+    }
 }
 
 void statement () {
@@ -508,8 +548,16 @@ void insertSymbol(int kind, char * identifier, int val, int level, int addr){
             s1.level = level;
             s1.addr = addr;
             s1.mark = 0;
-        }else {
-            // expecting variable or constant
+        }else if(kind == 3){
+            s1.kind = kind;
+            strcpy(s1.name, identifier);
+            s1.val = 0;
+            s1.level = level;
+            s1.addr = addr;
+            s1.mark = 0;
+        }
+        else{
+            // expecting variable constant or procedure
             error(18);
         }
         
@@ -622,7 +670,8 @@ void error (int errorNumber) {
         "Error: symbol name has already been declared", "Error: constants must be assigned with =", "Error: constants must be assigned an integer value", 
         "Error: constant and variable declarations must be followed by a semicolon", "Error: undeclared identifier", "Error: only variable values may be altered", "Error: assignment statements must use :=",
         "Error: begin must be followed by end", "Error: if must be followed by then", "Error: while must be followed by do", "Error: condition must contain comparison operator", "Error: right parenthesis must follow left parenthesis", 
-        "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols", "Error: code index exceeded code length", "Error: can't access symbol because mark set to one", "Error: program doesn't handle procedures", "Error: else must be followed by fi", "Error: if statement must include else clause", "Error: call statement may only target procedures", "Error: procedure declaration must be followed by a semicolon"};
+        "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols", "Error: code index exceeded code length", "Error: can't access symbol because mark set to one", "Error: program doesn't handle procedures", 
+        "Error: else must be followed by fi", "Error: if statement must include else clause", "Error: call statement may only target procedures", "Error: procedure declaration must be followed by a semicolon"};
     deleteAll();
     printf("%s\n", errors[errorNumber]);
     fprintf(outputFile, "%s\n", errors[errorNumber]);
