@@ -95,6 +95,8 @@ char * determineOpcode(int i);
 void error (int errorNumber);
 void getNextToken();
 void emit(int OP, int L, int M);
+void deleteAll();
+void deleteCurrentLevel();
 
 //Emit function
 void emit(int OP, int L, int M){
@@ -239,6 +241,9 @@ void procedureDeclaration(){
         if(nextToken != 17){
             error(22); //TO-Do: ask if both semicolon checks need to be different errors
         }
+        // returning from subroutine
+        deleteCurrentLevel();
+        emit(2, 0, 0);
         currentLevel--;
         getNextToken();
     }
@@ -587,6 +592,16 @@ void deleteSymbol(char * identifier){
 void deleteAll() {
     for(int i = tp; i >= 0; i--){
         deleteSymbol(symbol_table[i].name);
+    }
+}
+
+// change mark of all symbols at current level to 1
+void deleteCurrentLevel() {
+    for(int i = tp; i >= 0; i--){
+        if (symbol_table[i].level == currentLevel)
+            deleteSymbol(symbol_table[i].name);
+        else
+            break;
     }
 }
 
