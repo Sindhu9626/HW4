@@ -103,6 +103,9 @@ void print(int PAS[500]) {
         else if (IR.M == 10) {
             printf("\nGEQ");
         }
+        else if (IR.M == 10) {
+            printf("\nEVEN");
+        }
     }
     if(IR.OP == 3) {
         printf("\nLOD");
@@ -262,6 +265,14 @@ int main(int argc, char *argv[]) {
                     PAS[SP+1] = 0;
                 SP++;
             } 
+            // EVEN
+            else if (IR.M == 11) {
+                if(PAS[SP] % 2 == 0)
+                    PAS[SP+1] = 1;
+                else    
+                    PAS[SP+1] = 0;
+                SP++;
+            }
             print(PAS);
         }
         // LOD Instruction
