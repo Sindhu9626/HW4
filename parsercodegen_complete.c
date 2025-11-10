@@ -236,7 +236,7 @@ void procedureDeclaration(){
 
         getNextToken();
 
-        insertSymbol(3, identifier, 0, currentLevel, 0); //TO-DO fix insert for procedure
+        insertSymbol(3, identifier, 0, currentLevel, cx*3); //TO-DO fix insert for procedure
         
         block(); 
         if(nextToken != 17){
