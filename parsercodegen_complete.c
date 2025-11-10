@@ -124,7 +124,7 @@ void block () {
     int numsVars = varDeclaration();
     procedureDeclaration();
     // allocates memory on stack for dynamic and static link, return address, and variables
-    emit(6, currentLevel, 3 + numsVars);
+    emit(6, 0, 3 + numsVars);
     statement();
 }
 
@@ -211,6 +211,7 @@ void procedureDeclaration(){
 
     char * identifier = malloc(sizeof(char)*12);
     while(nextToken == 30){
+
         //increase level indicating a new lexigraphical level
         currentLevel++;
 
@@ -277,7 +278,17 @@ void statement () {
         // addresses expression being assigned to identifier
         expression();
         // store in variable location
-        emit(4, currentLevel, symbol_table[symIndex].addr);
+        int storeLevel;
+        if(symbol_table[symIndex].level != currentLevel) {
+            storeLevel = 0;
+        }
+        else if (symbol_table[symIndex].level > currentLevel) {
+            storeLevel = symbol_table[symIndex].level - currentLevel;
+        }
+        else {
+            storeLevel = currentLevel - symbol_table[symIndex].level;
+        }
+        emit(4, storeLevel, symbol_table[symIndex].addr);
         return;
     }
     if (nextToken == 27) {
