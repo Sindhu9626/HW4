@@ -280,6 +280,20 @@ void statement () {
         emit(4, currentLevel, symbol_table[symIndex].addr);
         return;
     }
+    if (nextToken == 27) {
+        getNextToken();
+        if(nextToken != 2) {
+            error(2);
+        }
+        fscanf(fp, "%s", identifier);
+        int symIndex = findSymbol(identifier);
+        if (symbol_table[symIndex].kind != 3) {
+            error(21);
+        }
+        emit(5, currentLevel, symbol_table[symIndex].addr);
+        getNextToken();
+        return;
+    }
     // checks if it's a begin symbol statement
     if(nextToken == 20) {
         // addresses all statements inside begin and end
@@ -682,7 +696,7 @@ void getNextToken () {
 
 // called when there's an error
 void error (int errorNumber) {
-    char * errors [23] = {"Error: Scanning error detected by lexer (skipsym present)", "Error: program must end with period", "Error: const, var, and read keywords must be followed by identifier", 
+    char * errors [23] = {"Error: Scanning error detected by lexer (skipsym present)", "Error: program must end with period", "Error: const, var, read, procedure, and call keywords must be followed by identifier",  
         "Error: symbol name has already been declared", "Error: constants must be assigned with =", "Error: constants must be assigned an integer value", 
         "Error: constant and variable declarations must be followed by a semicolon", "Error: undeclared identifier", "Error: only variable values may be altered", "Error: assignment statements must use :=",
         "Error: begin must be followed by end", "Error: if must be followed by then", "Error: while must be followed by do", "Error: condition must contain comparison operator", "Error: right parenthesis must follow left parenthesis", 
