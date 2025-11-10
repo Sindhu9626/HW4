@@ -157,7 +157,7 @@ void constDeclaration () {
             // get number values
             fscanf(fp, "%d", &value);
             // insert symbol name into table
-            insertSymbol(1, identifier, value, 0, 0);
+            insertSymbol(1, identifier, value, currentLevel, 0);
             getNextToken();
         } while (nextToken == 16); // if next symbol is comma there's another const
         // next symbol should be semicolon
@@ -189,7 +189,7 @@ int varDeclaration () {
                 error(3);
             }
             // insert identifier into symbol table
-            insertSymbol(2, identifier, 0, 0, numVars + 2);
+            insertSymbol(2, identifier, 0, currentLevel, numVars + 2);
             getNextToken();
         } while(nextToken == 16); // if next symbol is comma, another variable is being declared
 
@@ -209,6 +209,8 @@ void procedureDeclaration(){
 
     char * identifier = malloc(sizeof(char)*12);
     while(nextToken == 30){
+        //increase level indicating a new lexigraphical level
+        currentLevel++;
 
         getNextToken();
         // should declare identifier
@@ -218,7 +220,7 @@ void procedureDeclaration(){
 
         fscanf(fp, "%s", identifier);
 
-        //cheecking if identifer already in table, error if so
+        //checking if identifer already in table, error if so
         if(findSymbol(identifier) != -1){
             error(3);
         }
@@ -231,14 +233,13 @@ void procedureDeclaration(){
 
         getNextToken();
 
-        insertSymbol(3, identifier, 0, 0, 0); //TO-DO fix insert for procedure
-        //TO-DO inscrease level before calling block indicating a new lexigraphical level
-
+        insertSymbol(3, identifier, 0, currentLevel, 0); //TO-DO fix insert for procedure
+        
         block(); 
         if(nextToken != 17){
             error(22); //TO-Do: ask if both semicolon checks need to be different errors
         }
-
+        currentLevel--;
         getNextToken();
     }
 }
