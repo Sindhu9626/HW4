@@ -536,7 +536,6 @@ void factor(){
         expression();
         // expecting right parentheses after left parentheses
         if(nextToken != 15){
-            printf("here");
             error(14);
         }
         getNextToken();
@@ -729,7 +728,7 @@ int main (int argc, char *argv[])
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
-    
+
     // open input and output files
     fp = fopen("tokens.txt", "r");
     outputFile = fopen("elf.txt", "w");
