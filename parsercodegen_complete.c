@@ -121,6 +121,7 @@ void program() {
 
 void block () {
     int jmpIndex = cx;
+    emit(7, 0, 0);
     constDeclaration();
     int numsVars = varDeclaration();
     procedureDeclaration();
