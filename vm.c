@@ -136,11 +136,7 @@ void print(int PAS[500]) {
     // print current stack
     int arb = BP;
     int prevLevel = 0;
-    while(arb < 439) {
-        /*for (int i = arb; SP <= i; i--) {
-        printf("%d ",  PAS[i]);
-        
-        }*/
+    while(arb < 499-(sizeof(IR)-1)*3) {
         prevLevel = arb;
         arb = PAS[arb - 1];
     }
