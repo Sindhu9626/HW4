@@ -120,9 +120,11 @@ void program() {
 }
 
 void block () {
+    int jmpIndex = cx;
     constDeclaration();
     int numsVars = varDeclaration();
     procedureDeclaration();
+    instructionSet[jmpIndex].M = cx*3;
     // allocates memory on stack for dynamic and static link, return address, and variables
     emit(6, 0, 3 + numsVars);
     statement();
@@ -726,9 +728,7 @@ int main (int argc, char *argv[])
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
-
-    // hard coded instruction to jump to program
-    emit(7, 0, 3);
+    
     // open input and output files
     fp = fopen("tokens.txt", "r");
     outputFile = fopen("elf.txt", "w");
