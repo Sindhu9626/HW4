@@ -59,6 +59,8 @@ struct instruction IR;
 // Registers
 int PC, BP, SP;
 
+int instructionCount;
+
 // BASE FUNCTION
 int base ( int BP , int L ){
     int arb = BP ; // activation record base
@@ -136,7 +138,7 @@ void print(int PAS[500]) {
     // print current stack
     int arb = BP;
     int prevLevel = 0;
-    while(arb < 499-(sizeof(IR)-1)*3) {
+    while(arb < instructionCount) {
         prevLevel = arb;
         arb = PAS[arb - 1];
     }
@@ -172,6 +174,7 @@ int main(int argc, char *argv[]) {
     while(fscanf(inputFile,"%d",&PAS[i]) == 1) {
             i--;
     }
+    instructionCount = i;
 
     // Setting Global Variables
     PC = 499;

@@ -215,9 +215,6 @@ void procedureDeclaration(){
     char * identifier = malloc(sizeof(char)*12);
     while(nextToken == 30){
 
-        //increase level indicating a new lexigraphical level
-        currentLevel++;
-
         getNextToken();
         // should declare identifier
         if(nextToken != 2){
@@ -240,7 +237,8 @@ void procedureDeclaration(){
         getNextToken();
 
         insertSymbol(3, identifier, 0, currentLevel, cx*3); //TO-DO fix insert for procedure
-        
+        //increase level indicating a new lexigraphical level
+        currentLevel++;
         block(); 
         if(nextToken != 17){
             error(22); //TO-Do: ask if both semicolon checks need to be different errors
