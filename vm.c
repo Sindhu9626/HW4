@@ -60,6 +60,8 @@ int instructionCount;
 // Registers
 int PC, BP, SP;
 
+int instructionCount;
+
 // BASE FUNCTION
 int base ( int BP , int L ){
     int arb = BP ; // activation record base
@@ -139,7 +141,6 @@ void print(int PAS[500]) {
     // print current stack
     int arb = BP;
     int prevLevel = 0;
-    
     while(arb < instructionCount) {
         prevLevel = arb;
         arb = PAS[arb - 1];
