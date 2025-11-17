@@ -56,6 +56,7 @@ int PAS [500] = {0};
 
 // instruction register
 struct instruction IR;
+int instructionCount;
 // Registers
 int PC, BP, SP;
 
@@ -122,6 +123,7 @@ void print(int PAS[500]) {
     }
     if(IR.OP == 7) {
         printf("\nJMP");
+        //printf("\nInside jump");
     }
     if(IR.OP == 8) {
         printf("\nJPC");
@@ -133,10 +135,12 @@ void print(int PAS[500]) {
     }
     // print current register values
     printf("\t%d \t%d \t%d \t%d \t%d \t", IR.L, IR.M, PC, BP, SP);
+
     // print current stack
     int arb = BP;
     int prevLevel = 0;
-    while(arb < 499-(sizeof(IR)-1)*3) {
+    
+    while(arb < instructionCount) {
         prevLevel = arb;
         arb = PAS[arb - 1];
     }
@@ -172,15 +176,17 @@ int main(int argc, char *argv[]) {
     while(fscanf(inputFile,"%d",&PAS[i]) == 1) {
             i--;
     }
-
+    instructionCount = i;
     // Setting Global Variables
     PC = 499;
     SP = i + 1;
     BP = SP - 1;
+
     printf("\tL \tM \tPC \tBP \tSP \tstack\n");
     printf("\nInitial values: \t%d \t%d \t%d\n", PC, BP, SP);
+
     while(1){
-        
+        //printf("Here");
         // Setting Instruction Register
         IR.OP = PAS[PC];
         IR.L = PAS[PC-1];
@@ -301,6 +307,7 @@ int main(int argc, char *argv[]) {
         else if (IR.OP == 7) {  
             // Unconditional jumps
             PC = 499 - IR.M;
+            //printf("Here Jump");
             print(PAS);
         }
         else if (IR.OP == 8) {
