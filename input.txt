@@ -1,8 +1,8 @@
 var a, b;
 procedure x;
-    var q, w;
+    var a, b;
     begin
-        q := 1;
+        a := 1;
     end;
 begin
     a := 2;
