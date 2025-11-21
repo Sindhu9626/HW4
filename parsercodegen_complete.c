@@ -145,8 +145,9 @@ void constDeclaration () {
             }
             // get identifier
             fscanf(fp, "%s", identifier);
-            // Symbol name should not have been previously declared
-            if (findSymbol(identifier) != -1) {
+            int identifierIndex = findSymbol(identifier);
+            // identifier shouldn't already be in symbol table 
+            if(identifierIndex != -1 && symbol_table[identifierIndex].level == currentLevel) {
                 error(3);
             }
             getNextToken();
@@ -189,9 +190,9 @@ int varDeclaration () {
                
             }
             fscanf(fp, "%s", identifier);
+            int identifierIndex = findSymbol(identifier);
             // identifier shouldn't already be in symbol table 
-            int hold = findSymbol(identifier);
-            if(symbol_table[hold].level == currentLevel) {
+            if(identifierIndex != -1 && symbol_table[identifierIndex].level == currentLevel) {
                 error(3);
             }
             // insert identifier into symbol table
@@ -223,9 +224,9 @@ void procedureDeclaration(){
         }
 
         fscanf(fp, "%s", identifier);
-
-        //checking if identifer already in table, error if so
-        if(findSymbol(identifier) != -1){
+        int identifierIndex = findSymbol(identifier);
+        // identifier shouldn't already be in symbol table 
+        if(identifierIndex != -1 && symbol_table[identifierIndex].level == currentLevel) {
             error(3);
         }
 
@@ -552,7 +553,7 @@ void factor(){
 int findSymbol(char * identifier) {
     int i;
     for(i = tp; i >= 0; i--) {
-        if(strcmp(symbol_table[i].name, identifier) == 0) {
+        if(strcmp(symbol_table[i].name, identifier) == 0 && symbol_table[i].level <= currentLevel) {
             return i;
         }
     }
@@ -560,7 +561,8 @@ int findSymbol(char * identifier) {
 }
 
 void insertSymbol(int kind, char * identifier, int val, int level, int addr){
-    if(findSymbol(identifier) == -1 ){
+    int identifierIndex = findSymbol(identifier);
+    if(identifierIndex == -1 || currentLevel != symbol_table[identifierIndex].level){
         symbol s1;
         // if constant
         if (kind == 1){
@@ -612,7 +614,7 @@ void deleteSymbol(char * identifier){
             symbol_table[i].mark = 1;
         }
     }
-    tp--;
+    //tp--;
 }
 
 // change mark of all symbols to 1
