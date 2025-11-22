@@ -283,18 +283,11 @@ void statement () {
         expression();
         // store in variable location
         int storeLevel;
-        if(symbol_table[symIndex].level != currentLevel) {
-            storeLevel = 0;
-        }
-        else if (symbol_table[symIndex].level > currentLevel) {
-            storeLevel = symbol_table[symIndex].level - currentLevel;
-        }
-        else {
-            storeLevel = currentLevel - symbol_table[symIndex].level;
-        }
+        storeLevel = currentLevel - symbol_table[symIndex].level;
         emit(4, storeLevel, symbol_table[symIndex].addr);
         return;
     }
+    // CALL sym
     if (nextToken == 27) {
         getNextToken();
         if(nextToken != 2) {
@@ -302,6 +295,9 @@ void statement () {
         }
         fscanf(fp, "%s", identifier);
         int symIndex = findSymbol(identifier);
+        if(symIndex == -1) {
+            error(7);
+        }
         if (symbol_table[symIndex].kind != 3) {
             error(21);
         }
@@ -522,7 +518,8 @@ void factor(){
             emit(1, 0, symbol_table[symIdx].val); //LIT 
         }
         else{
-            emit(3, currentLevel, symbol_table[symIdx].addr); //LOD 
+            int loadLevel = currentLevel - symbol_table[symIdx].level;
+            emit(3, loadLevel, symbol_table[symIdx].addr); //LOD 
         }
         getNextToken();
     }
