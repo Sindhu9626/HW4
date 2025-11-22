@@ -243,7 +243,7 @@ void procedureDeclaration(){
         currentLevel++;
         block(); 
         if(nextToken != 17){
-            error(22); //TO-Do: ask if both semicolon checks need to be different errors
+            error(23); //TO-Do: ask if both semicolon checks need to be different errors
         }
         // returning from subroutine
         deleteCurrentLevel();
@@ -259,6 +259,7 @@ void statement () {
     if (nextToken == 2) {
         fscanf(fp, "%s", identifier);
         
+        //TO-DO: do we need an error for out of scope?
         int symIndex = findSymbol(identifier);
         // identifier should've been previously declared
         if (symIndex == -1) {
@@ -315,6 +316,7 @@ void statement () {
             getNextToken();
             statement();
         } while (nextToken == 17); // if there's another statement, should be followed by semicolon
+
         // after all statements in begin, end symbol expected
         if (nextToken != 21) {
             error(10);
@@ -710,12 +712,31 @@ void getNextToken () {
 
 // called when there's an error
 void error (int errorNumber) {
-    char * errors [23] = {"Error: Scanning error detected by lexer (skipsym present)", "Error: program must end with period", "Error: const, var, read, procedure, and call keywords must be followed by identifier",  
-        "Error: symbol name has already been declared", "Error: constants must be assigned with =", "Error: constants must be assigned an integer value", 
-        "Error: constant and variable declarations must be followed by a semicolon", "Error: undeclared identifier", "Error: only variable values may be altered", "Error: assignment statements must use :=",
-        "Error: begin must be followed by end", "Error: if must be followed by then", "Error: while must be followed by do", "Error: condition must contain comparison operator", "Error: right parenthesis must follow left parenthesis", 
-        "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols", "Error: code index exceeded code length", "Error: can't access symbol because mark set to one", "Error: program doesn't handle procedures", 
-        "Error: else must be followed by fi", "Error: if statement must include else clause", "Error: call statement may only target procedures", "Error: procedure declaration must be followed by a semicolon"};
+    char * errors [24] = {
+        "Error: Scanning error detected by lexer (skipsym present)",
+        "Error: program must end with period", 
+        "Error: const, var, read, procedure, and call keywords must be followed by identifier",  
+        "Error: symbol name has already been declared", 
+        "Error: constants must be assigned with =", 
+        "Error: constants must be assigned an integer value", 
+        "Error: constant and variable declarations must be followed by a semicolon", 
+        "Error: undeclared identifier", 
+        "Error: only variable values may be altered", 
+        "Error: assignment statements must use :=",
+        "Error: begin must be followed by end", 
+        "Error: if must be followed by then", 
+        "Error: while must be followed by do", 
+        "Error: condition must contain comparison operator", 
+        "Error: right parenthesis must follow left parenthesis", 
+        "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols", 
+        "Error: code index exceeded code length", 
+        "Error: can't access symbol because mark set to one", 
+        "Error: program doesn't handle procedures", 
+        "Error: else must be followed by fi", 
+        "Error: if statement must include else clause", 
+        "Error: call statement may only target procedures", 
+        "Error: procedure declaration must be followed by a semicolon",
+        "Error: procedure block must be followed by a semicolon"};
     deleteAll();
     printf("%s\n", errors[errorNumber]);
     fprintf(outputFile, "%s\n", errors[errorNumber]);

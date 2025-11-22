@@ -1,0 +1,31 @@
+const c = 2; 
+var g;
+
+procedure P;
+   var x, y;
+   procedure D; 
+      var h; 
+      begin       
+         x := 2;
+         y := 3;
+         if even c then
+            g := x + y;
+         else
+            g := x - y;
+         fi; 
+       end; 
+               
+   begin
+       x := 5;
+       call D; 
+   end;
+procedure Q;
+   var z;
+   begin
+      z := 5;
+      call P;
+   end;   
+begin
+   call Q; 
+end.   
+
