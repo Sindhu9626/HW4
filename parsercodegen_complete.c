@@ -243,7 +243,7 @@ void procedureDeclaration(){
         currentLevel++;
         block(); 
         if(nextToken != 17){
-            error(22); //TO-Do: ask if both semicolon checks need to be different errors
+            error(23); //TO-Do: ask if both semicolon checks need to be different errors
         }
         // returning from subroutine
         deleteCurrentLevel();
@@ -316,6 +316,7 @@ void statement () {
             getNextToken();
             statement();
         } while (nextToken == 17); // if there's another statement, should be followed by semicolon
+
         // after all statements in begin, end symbol expected
         if (nextToken != 21) {
             error(10);
@@ -711,7 +712,7 @@ void getNextToken () {
 
 // called when there's an error
 void error (int errorNumber) {
-    char * errors [23] = {
+    char * errors [24] = {
         "Error: Scanning error detected by lexer (skipsym present)",
         "Error: program must end with period", 
         "Error: const, var, read, procedure, and call keywords must be followed by identifier",  
@@ -734,7 +735,8 @@ void error (int errorNumber) {
         "Error: else must be followed by fi", 
         "Error: if statement must include else clause", 
         "Error: call statement may only target procedures", 
-        "Error: procedure declaration must be followed by a semicolon"};
+        "Error: procedure declaration must be followed by a semicolon",
+        "Error: procedure block must be followed by a semicolon"};
     deleteAll();
     printf("%s\n", errors[errorNumber]);
     fprintf(outputFile, "%s\n", errors[errorNumber]);
