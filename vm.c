@@ -267,9 +267,9 @@ int main(int argc, char *argv[]) {
             // EVEN
             else if (IR.M == 11) {
                 if(PAS[SP] % 2 == 0)
-                    PAS[SP+1] = 1;
+                    PAS[SP] = 1;
                 else    
-                    PAS[SP+1] = 0;
+                    PAS[SP] = 0;
                 SP++;
             }
             print(PAS);
