@@ -301,7 +301,7 @@ void statement () {
         if (symbol_table[symIndex].kind != 3) {
             error(21);
         }
-        emit(5, currentLevel, symbol_table[symIndex].addr);
+        emit(5, currentLevel - symbol_table[symIndex].level, symbol_table[symIndex].addr);
         getNextToken();
         return;
     }
